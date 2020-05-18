@@ -1,0 +1,155 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="ydlidar_model" params="parent *origin">
+
+  <joint name="ydlidar_joint" type="fixed">
+    <xacro:insert_block name="origin" />
+    <parent link="${parent}"/>
+    <child link="base_laser_link"/>
+  </joint>
+
+  <link name="base_laser_link">
+    <inertial>
+      <origin
+        xyz="-0.00029774 0.0066667 0.00013047"
+        rpy="0 0 0" />
+      <mass
+        value="0.15717" />
+      <inertia
+        ixx="6.7885E-05"
+        ixy="-1.3987E-07"
+        ixz="-8.1554E-07"
+        iyy="0.00013173"
+        iyz="-9.0932E-08"
+        izz="7.1972E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ydlidar/meshes/ydlidar.dae" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.64706 0.61961 0.58824 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ydlidar/meshes/ydlidar.dae" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link
+    name="laser_frame_link">
+    <inertial>
+      <origin
+        xyz="-0.00036659 0.00064155 -0.00027052"
+        rpy="0 0 0" />
+      <mass
+        value="0.25482" />
+      <inertia
+        ixx="8.9194E-05"
+        ixy="1.8116E-07"
+        ixz="3.6435E-08"
+        iyy="0.00018279"
+        iyz="2.423E-07"
+        izz="0.00011103" />
+    </inertial>
+    <!--visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ydlidar/meshes/ydlidar.dae" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.64706 0.61961 0.58824 1" />
+      </material>
+    </visual-->
+    <!--collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ydlidar/meshes/ydlidar.dae" />
+      </geometry>
+    </collision-->
+
+  </link>
+
+	  <gazebo reference="laser_frame_link">
+	    <mu1>0.3</mu1>
+            <mu2>0.3</mu2>
+	    <sensor type="ray" name="lidar">
+	      <always_on>true</always_on>
+              <visualize>false</visualize>
+              <update_rate>9</update_rate>
+              <ray>
+                <scan>
+                  <!-- The horizontal beams -->
+                  <horizontal>
+                    <!-- The ydlidar has n beams(samples) -->
+                    <samples>720</samples>
+           	    <resolution>1</resolution>
+           	    <min_angle>0</min_angle>
+            	    <max_angle>6.2831853</max_angle>
+           	  </horizontal>
+          	</scan>
+              <!-- Range defines characteristics of an individual beam -->
+              <range>
+                <!-- Minimum distance of the beam -->
+                <min>0.12</min>
+                <!-- Maximum distance of the beam -->
+                <max>10</max>
+                <!-- Linear resolution of the beam -->
+                <resolution>0.5</resolution>
+              </range>
+              <noise>
+                <type>gaussian</type>
+                <mean>0.0</mean>
+                <stddev>0.004</stddev>
+              </noise>
+            </ray>
+            <plugin name="gazebo_ros_ydlidar_controller" filename="libgazebo_ros_laser.so">
+              <topicName>/ydlidar/laser/scan</topicName>
+              <frameName>laser_frame_link</frameName>
+            </plugin>
+
+          </sensor>
+	</gazebo>
+
+  <joint
+    name="laser_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0.03172"
+      rpy="0 0 0" />
+    <parent
+      link="base_laser_link" />
+    <child
+      link="laser_frame_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <gazebo reference="base_laser_link">
+    <mu1>0.3</mu1>
+    <mu2>0.3</mu2>
+  </gazebo>
+
+  </xacro:macro>
+</robot>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<robot name="kobuki_yd" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find kobuki_description)/urdf/kobuki.urdf.xacro" />
+  <xacro:include filename="$(find kobuki_yd)/urdf/ydlidar.urdf.xacro" />
+
+  <xacro:kobuki/>
+
+  <ydlidar_model parent="lidar_bottom">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </ydlidar_model>
+
+</robot>

@@ -14,7 +14,7 @@
 
 <launch>
 
-  <!--<param name="robot_description" textfile="$(find ydlidar)/urdf/ydlidar.urdf" />-->
+
 
   <node name="cartographer_node" pkg="cartographer_ros"
       type="cartographer_node" args="
@@ -22,29 +22,12 @@
           -configuration_basename kobuki_yd.lua"
       output="screen">
     <remap from="scan" to="/ydlidar/laser/scan" />
-    <remap from="imu" to="/mobile_base/sensors/imu_data" /> <!-- IMU Comp filter output -->
-    <!-- <remap from="imu" to="/os1_cloud_node/imu" /> -->
-    <remap from="odom" to="/odom" /> <!-- EKF filter output, not used -->
-    <!--<remap from="points2" to="/os1_cloud_node/points" />--> <!-- PC2 output, not used -->
   </node>
-<!--    <node name="flat_world_imu_node" pkg="cartographer_turtlebot"
-      type="cartographer_flat_world_imu_node" output="screen">
-    <remap from="imu_in" to="/mobile_base/sensors/imu_data" />
-    <remap from="imu_out" to="/imu" />
-  </node>
+
   <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
-      type="cartographer_occupancy_grid_node" args="-resolution 0.05" />-->
+      type="cartographer_occupancy_grid_node" args="-resolution 0.05" />
 
-  <!--<node pkg="tf" type="static_transform_publisher" name="imu_to_base_broadcaster" args="0 0 0 0 0 0 imu base_link 50" />-->
-  <!--<node pkg="tf" type="static_transform_publisher" name="map_to_base_broadcaster" args="0 0 0 0 0 0 map base 50" />-->
-
-  <!--<node pkg="tf" type="static_transform_publisher" name="world_to_map_broadcaster" args="0 0 0 0 0 0 world map 50" />-->
-  <!--<node pkg="tf" type="static_transform_publisher" name="map_to_base_broadcaster" args="0 0 0 0 0 0 map base_link 50" />-->
-  <!--<node pkg="tf" type="static_transform_publisher" name="base_to_laser_broadcaster" args="0 0 0 0 0 0 base_link laser_link 50" />-->
-  <!--<node pkg="tf" type="static_transform_publisher" name="base_to_foot_broadcaster" args="0 0 0 0 0 0 base_link base_footprint 50" />-->
-  <!--<node pkg="tf" type="static_transform_publisher" name="odom_to_base_broadcaster" args="0 0 0 0 0 0 odom base_link 50" />-->
-
-  <node name="rviz" pkg="rviz" type="rviz" required="true"
+  <node name="rviz" pkg="rviz" type="rviz" required="false"
       args="-d $(find kobuki_yd)/config_files/kobuki_yd_rviz.rviz" />
 
 </launch>

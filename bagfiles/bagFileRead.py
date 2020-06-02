@@ -40,6 +40,24 @@ for topic, msg, t in bag.read_messages(topics=['/odom']):
 odomText.close()	
 odomcsv.close()
 
+#Collect odom_combined messages and create csv file
+odom_combined_csv = open("odom_combinedData.csv", 'wb')
+writer = csv.writer(odom_combined_csv, delimiter=',')
+
+odom_combined_Text = open("odom_combinedMessages.txt", "w+")
+
+for topic, msg, t in bag.read_messages(topics=['/robot_pose_ekf/odom_combined']):
+	#prints raw message	
+	odom_combined_Text.write(str(msg) + '\n\n')
+	print(msg)
+	#adds odometry position to csv
+	row = []	
+	row.extend([msg.pose.pose.position.x, msg.pose.pose.position.y])
+	writer.writerow(row)
+
+odom_combined_Text.close()	
+odom_combined_csv.close()
+
 
 #Collect mobile base imu data and create csv file
 mobilebasecsv = open("imuData.csv", 'wb')

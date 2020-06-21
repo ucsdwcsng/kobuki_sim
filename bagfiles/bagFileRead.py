@@ -60,22 +60,22 @@ odom_combined_csv.close()
 
 
 #Collect mobile base imu data and create csv file
-mobilebasecsv = open("imuData.csv", 'wb')
-writer = csv.writer(mobilebasecsv, delimiter = ',')
-
-mobile_base_imu_Test = open("mobile_base_imu_Messages.txt", "w+")
-
-for topic, msg, t in bag.read_messages(topics=['/mobile_base/sensors/imu_data']):
-	#prints raw message
-	mobile_base_imu_Test.write(str(msg) + "\n\n")
-	print(msg)	
-	#adds imu linear acceleration (x and y) to csv
-	row = []	
-	row.extend([msg.header.stamp.secs + 1e-9*msg.header.stamp.nsecs, msg.linear_acceleration.x, msg.linear_acceleration.y])
-	writer.writerow(row)
-mobilebasecsv.close()
-mobile_base_imu_Test.close()
-
+#mobilebasecsv = open("imuData.csv", 'wb')
+#writer = csv.writer(mobilebasecsv, delimiter = ',')
+#
+#mobile_base_imu_Test = open("mobile_base_imu_Messages.txt", "w+")
+#
+#for topic, msg, t in bag.read_messages(topics=['/mobile_base/sensors/imu_data']):
+#	#prints raw message
+#	mobile_base_imu_Test.write(str(msg) + "\n\n")
+#	print(msg)	
+#	#adds imu linear acceleration (x and y) to csv
+#	row = []	
+#	row.extend([msg.header.stamp.secs + 1e-9*msg.header.stamp.nsecs, msg.linear_acceleration.x, msg.linear_acceleration.y])
+#	writer.writerow(row)
+#mobilebasecsv.close()
+#mobile_base_imu_Test.close()
+#
 
 
 #Collect model states and create csv file

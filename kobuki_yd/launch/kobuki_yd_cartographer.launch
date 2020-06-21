@@ -22,6 +22,7 @@
           -configuration_basename kobuki_yd.lua"
       output="screen">
     <remap from="scan" to="/ydlidar/laser/scan" />
+    <!--<remap from="imu" to="/mobile_base/sensors/imu_data" />-->
   </node>
 
   <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
@@ -29,5 +30,7 @@
 
   <node name="rviz" pkg="rviz" type="rviz" required="false"
       args="-d $(find kobuki_yd)/config_files/kobuki_yd_rviz.rviz" />
-
+  <!--<node pkg="tf" type="static_transform_publisher" name="map_odom_tf_publisher" args="0 0 0 0 0 0 map odom 10"/>
+  <node pkg="tf" type="static_transform_publisher" name="odom_link_tf_publisher" args="0 0 0 0 0 0 odom base_link 10"/>
+  <node pkg="tf" type="static_transform_publisher" name="world_map_tf_publisher" args="0 0 0 0 0 0 world map 10"/>-->
 </launch>

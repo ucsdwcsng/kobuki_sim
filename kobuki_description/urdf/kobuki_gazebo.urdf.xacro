@@ -144,30 +144,33 @@
 	    </sensor>
 	  </gazebo>
 
-	  <gazebo reference="gyro_link">
-	   <sensor type="imu" name="imu">
-        <always_on>true</always_on>
-        <update_rate>50</update_rate>
-        <visualize>true</visualize>
-        <imu>
-          <noise>
-            <type>gaussian</type>
-	          <rate>
-	            <mean>0.0</mean>
-	            <stddev>${0.0014*0.0014}</stddev> <!-- 0.25 x 0.25 (deg/s) -->
-	            <bias_mean>0.0</bias_mean>
-	            <bias_stddev>0.0</bias_stddev>
-	          </rate>
-		        <accel> <!-- not used in the plugin and real robot, hence using tutorial values -->
-			        <mean>0.0</mean>
-			        <stddev>1.7e-2</stddev>
-			        <bias_mean>0.1</bias_mean>
-			        <bias_stddev>0.001</bias_stddev>
-		        </accel>
-          </noise>
-	      </imu>
-      </sensor>
-	  </gazebo>
+	  <!--<gazebo reference="gyro_link">
+     		<sensor type="imu" name="imu">
+        		<always_on>true</always_on>
+        		<update_rate>50</update_rate>
+        		<visualize>true</visualize>
+			
+        		<imu>
+          			<noise>
+            				<type>gaussian</type>
+	          			<rate>
+	            				<mean>0.0</mean>
+	            				<stddev>${0.0014*0.0014}</stddev> 
+	        			    	<bias_mean>0.0</bias_mean>
+	           	 			<bias_stddev>0.0</bias_stddev>
+	          			</rate>
+		        		<accel> 
+			        		<mean>0.0</mean>
+			        		<stddev>1.7e-2</stddev>
+			        		<bias_mean>0.1</bias_mean>
+			        		<bias_stddev>0.001</bias_stddev>
+		        		</accel>
+          			</noise>
+			</imu>
+
+      		</sensor>
+
+	  </gazebo>-->
 
 	  <gazebo>
 	    <plugin name="kobuki_controller" filename="libgazebo_ros_kobuki.so">
@@ -193,7 +196,38 @@
               <frameName>ydlidar_frame</frameName>
 	    </plugin>
 	  </gazebo>-->
+  <!--<gazebo>
+    <plugin name="imu" filename="libgazebo_ros_imu.so">
+      <alwaysOn>true</alwaysOn>
+      <bodyName>gyro_link</bodyName>
+      <frameName>gyro_link</frameName>
+      <topicName>imu</topicName>
+      <serviceName>imu</serviceName>
+      <gaussianNoise>0.0</gaussianNoise>
+      <updateRate>20.0</updateRate>
+    </plugin>
+  </gazebo>-->
 
+<gazebo reference="gyro_link">
+    <gravity>true</gravity>
+    <sensor name="imu" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>imu</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu">
+        <topicName>imu</topicName>
+        <bodyName>gyro_link</bodyName>
+        <updateRateHZ>10.0</updateRateHZ>
+        <gaussianNoise>${0.0014*0.0014}</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>gyro_link</frameName>
+        <initialOrientationAsReference>false</initialOrientationAsReference>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+  </gazebo>
 
   </xacro:macro>
 </robot>

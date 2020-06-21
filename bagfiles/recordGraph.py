@@ -63,34 +63,34 @@ plt.plot(modelx[len(modelx)-1], modely[len(modely)-1], marker = 'v')
 plt.title('Position based on \gazebo\model_states')
 	 
 #check position calculations for imu data
-time = []
-accelx = [0]
-accely = [0]
-velx = [0]
-vely = [0]
-posx = [0]
-posy = [0]
-with open('imuData.csv') as f:
-	acceleration = csv.reader(f)
-	for row in acceleration:
-		time.append(float(row[0]))
-		accelx.append(float(row[1]))
-		accely.append(float(row[2]))
+#time = []
+#accelx = [0]
+#accely = [0]
+#velx = [0]
+#vely = [0]
+#posx = [0]
+#posy = [0]
+#with open('imuData.csv') as f:
+#	acceleration = csv.reader(f)
+#	for row in acceleration:
+#		time.append(float(row[0]))
+#		accelx.append(float(row[1]))
+#		accely.append(float(row[2]))
 
-time.insert(0, (2*time[0]-time[1])) 
+#time.insert(0, (2*time[0]-time[1])) 
+#
+#for i in range (1, len(time)-1):
+#	velx.append(velx[i-1] + accelx[i] * (time[i]-time[i-1]))
+#	posx.append(posx[i-1] + velx[i] * (time[i]-time[i-1]))
+#	vely.append(vely[i-1] + accely[i] * (time[i]-time[i-1]))
+# 	posy.append(posy[i-1] + vely[i] * (time[i]-time[i-1]))
 
-for i in range (1, len(time)-1):
-	velx.append(velx[i-1] + accelx[i] * (time[i]-time[i-1]))
-	posx.append(posx[i-1] + velx[i] * (time[i]-time[i-1]))
-	vely.append(vely[i-1] + accely[i] * (time[i]-time[i-1]))
- 	posy.append(posy[i-1] + vely[i] * (time[i]-time[i-1]))
-
-plt.subplot(2,3,4)
-plt.plot(posx, posy, marker='o')
-plt.axis('equal')
-plt.plot(posx[0],posy[0], marker = '^')
-plt.plot(posx[len(posx)-1], posy[len(posy)-1], marker = 'v') 
-plt.title('Position based on \mobile_base\sensors\imu_data')
+#plt.subplot(2,3,4)
+#plt.plot(posx, posy, marker='o')
+#plt.axis('equal')
+#plt.plot(posx[0],posy[0], marker = '^')
+#plt.plot(posx[len(posx)-1], posy[len(posy)-1], marker = 'v') 
+#plt.title('Position based on \mobile_base\sensors\imu_data')
 
 
 ##check how to collect tf data

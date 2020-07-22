@@ -11,7 +11,7 @@
   <xacro:include filename="$(find kobuki_description)/urdf/kobuki_gazebo.urdf.xacro"/>
 
   <!-- Kobuki -->
-  <xacro:macro name="kobuki">
+  <xacro:macro name="kobuki" params="imu_noise">
     <link name="base_footprint"/>
     <!--
        Base link is set at the bottom of the base mould.
@@ -262,7 +262,7 @@
      </joint>
 
 
-    <kobuki_sim/>
+    <kobuki_sim imu_n = "${imu_noise}"/>
 
   </xacro:macro>
 

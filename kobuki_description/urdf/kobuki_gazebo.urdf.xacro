@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <robot name="kobuki_sim" xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:macro name="kobuki_sim">
+  <xacro:macro name="kobuki_sim" params = "imu_n">
 	  <gazebo reference="wheel_left_link">
 	    <mu1>1.0</mu1>
 	    <mu2>1.0</mu2>
@@ -217,12 +217,12 @@
       <topic>imu</topic>
       <plugin filename="libgazebo_ros_imu_sensor.so" name="imu">
         <topicName>imu</topicName>
-        <bodyName>gyro_link</bodyName>
+        <bodyName>base_footprint</bodyName>
         <updateRateHZ>10.0</updateRateHZ>
-        <gaussianNoise>${0.0014*0.0014}</gaussianNoise>
+        <gaussianNoise><!--${0.0014*0.0014}--> ${imu_n}</gaussianNoise>
         <xyzOffset>0 0 0</xyzOffset>
         <rpyOffset>0 0 0</rpyOffset>
-        <frameName>gyro_link</frameName>
+        <frameName>base_footprint</frameName>
         <initialOrientationAsReference>false</initialOrientationAsReference>
       </plugin>
       <pose>0 0 0 0 0 0</pose>

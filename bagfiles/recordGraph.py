@@ -94,8 +94,8 @@ plt.title('Position based on \imu')
 	 
 #check position calculations for mobile base imu data
 time = []
-accelx = [0]
-accely = [0]
+accelx = []
+accely = []
 velx = [0]
 vely = [0]
 posx = [0]

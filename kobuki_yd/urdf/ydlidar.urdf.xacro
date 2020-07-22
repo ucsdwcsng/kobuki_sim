@@ -1,8 +1,7 @@
 <?xml version="1.0" ?>
-<robot xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name = "ydlidar" xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:macro name="ydlidar_model" params="parent *origin">
-
+  <xacro:macro name="ydlidar_model" params="parent lidar_noise *origin">	
   <joint name="ydlidar_joint" type="fixed">
     <xacro:insert_block name="origin" />
     <parent link="${parent}"/>
@@ -121,7 +120,7 @@
               <noise>
                 <type>gaussian</type>
                 <mean>0.0</mean>
-                <stddev>0.004</stddev>
+                <stddev>${lidar_noise}</stddev>
               </noise>
             </ray>
             <plugin name="gazebo_ros_ydlidar_controller" filename="libgazebo_ros_laser.so">

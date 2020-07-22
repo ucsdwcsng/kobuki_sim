@@ -1,5 +1,12 @@
 <!-- Launches Kobuki Gazebo simulation in an empty world -->
 <launch>
+  <param name="/use_sim_time" value="true" />
+  <arg name="x" default="4.7"/>
+  <arg name="y" default="0.9"/>
+  <arg name="z" default="0"/>
+  <arg name="roll" default="0"/>
+  <arg name="pitch" default="0"/>
+  <arg name="yaw" default="0"/>
   <!-- start Gazebo with an empty world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="use_sim_time" value="true"/>
@@ -12,7 +19,7 @@
   <param name="robot_description"
         command="$(find xacro)/xacro.py '$(find kobuki_yd)/urdf/kobuki_yd.urdf.xacro' imuNoise:=$(arg imu_noise) lidarNoise:=$(arg lidar_noise)"/>
   <node pkg="gazebo_ros" type="spawn_model" name="spawn_$(arg robot_name)"
-        args="-x 5.0 -y 1 -z 1.5 -unpause -urdf -param robot_description -model $(arg robot_name)" respawn="false">
+        args="-x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw) -unpause -urdf -param robot_description -model $(arg robot_name)"  respawn="false">
   </node>
 
   <!-- Monitoring -->
@@ -23,9 +30,8 @@
   </node>
 
   <node pkg="nodelet" type="nodelet" name="$(arg robot_name)_nodelet_manager" args="manager"/>
-
-  <include file="$(find kobuki_yd)/launch/kobuki_yd_cartographer.launch"/>
-
-  <include file="$(find kobuki_keyop)/launch/keyop.launch"/>
-
+  <!--set velocity of robot-->
+  <node pkg="straight_line" type="line.py" name="velocity_manager" output="screen"/>
+  <node pkg="rosbag" type="record" name="bag_recorder" args="record -a --duration=3m /chatter -O /home/joel/bagfiles/$(arg bagfile_name)/$(arg bagfile_name)_imu-$(arg imu_noise)_lidar-$(arg lidar_noise).bag" output="screen"/>
 </launch>
+

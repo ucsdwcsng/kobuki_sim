@@ -1,0 +1,31 @@
+These are all the scripts that can be used in this repository:
+
+1. bagFileRead.py - Reads a bagfile and outputs odom, robot_pose_ekf, mobile_base, imu, model_states to csv files
+  -requires input bag as argument
+2. circle.py - Rosnode that commands kobuki to move in a circle (need to create catkin workspace)
+3. ground_truth_error.py - Measures error of cartographer trajectory  against ground truth (odom topic), use for irregular trajectories (doesnt work on physical robot)
+  -requires input bag name, imu&lidar noise, and config as argument
+4. line.py - Rosnode that commands kobuki to move in a line back and forth (need to create catkin workspace)
+5. low_error_estimation.py - Measures error of cartographer trajectory against circle of best fit, does not take into account drift, use when robot is moving in a circle
+  -requires input bag name, imu&lidar noise, and config as argument
+6. new_record.sh - run gazebo simulation of robot in an enviornment with certain imu&lidar noise std dev values, then runs cartographer with several cartographer configs, then measures error of cartographer trajectories
+  -requires input bag name, imu&lidar noise as argument
+7. odom_parse.py - Outputs odom topic messages in bag file to a csv file (requires simulation/no ground friction)
+  -requires input bag name as argument
+8. position_graphs.py - Plots trajectories of model states (ground truth), odom,robot pose ekf, and cartographer trajectories
+  -requires input bag name
+9. real_ground_truth.py - Export gazebo ground truth to csv file (does not work with physical robot)
+  -requires input bag name
+10. recordGraph.py - graph trajectories given by csv files created by bagFileRead.py
+11. tf_parse_trajectory.py - convert tf poses in messages to poses
+  -requires text file name
+12. time_error_heatmap.py - Outputs median error for each time stamp to measure drift over long periods of time
+  -requires input bagfile
+13. tq_parse.py - convert cartographer trajectory messages (given by /trajectory_query) to poses in csv file
+  -requires input text file
+14. trajectory_node.py - convert bagfile with cartographer trajectories to csv file (generated bagfile with cartographer_dev_pbstream_trajectories_to_rosbag rosnode)
+  -requires input bag file
+15. trajectory.py - Measures error of cartographer trajectory against circle of best fit, takes into account drift, use when robot is moving in a circle
+ -requires input bag name, imu&lidar noise, and config as argument
+16. trajectory_record.py - runs new_record.sh multiple times, with several different imu and lidar noise files
+ -requires input bag name

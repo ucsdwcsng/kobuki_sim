@@ -1,0 +1,10 @@
+This folder contains all the urdf descriptions of the kobuki robot that can be used in gazebo simulations:
+
+1. kobuki_gazebo.urdf.xacro is the base urdf that defines all the properties of sensors and joints
+  - needs imu_n as an argument, defines imu std dev noise
+2. kobuki.urdf.xacro defines the kobuki tag that can be used in other urdf files, do not use this as a standalone kobuki
+  - needs imu_noise as an argument, defines imu std dev noise
+3. kobuki_standalone.urdf.xacro is the standalone kobuki robot that can be used in gazebo
+  - needs imu_noise as an argument
+4. kobuki_yd.urdf.xacro is the kobuki model with a lidar attached that can be used in gazebo
+  - needs imu_noise and lidar_noise as an argument

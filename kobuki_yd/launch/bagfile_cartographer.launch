@@ -12,6 +12,7 @@
   limitations under the License.
 -->
 
+<!--Run Cartographer on bagfile (no varying imu/lidar noise)-->
 <launch>
 	<param name="/use_sim_time" value="true" />
 

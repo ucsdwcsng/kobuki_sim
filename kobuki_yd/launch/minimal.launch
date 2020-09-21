@@ -1,4 +1,4 @@
-<!-- Launches Kobuki Gazebo simulation in an empty world -->
+<!-- Launches Kobuki Gazebo simulation in an empty world w/ no cartographer-->
 <launch>
   <!-- start Gazebo with an empty world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">

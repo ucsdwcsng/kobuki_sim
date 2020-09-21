@@ -1,3 +1,0 @@
-rosservice call /trajectory_query 0 > tq_$1_$2.txt
-python ~/kobuki_sim/bagfiles/tq_parse.py tq_$1_$2.txt
-python3 ~/kobuki_sim/bagfiles/newtrajectory.py $1 $2

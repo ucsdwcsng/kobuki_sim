@@ -12,17 +12,21 @@
   limitations under the License.
 -->
 
-<launch>
-	  <param name="/use_sim_time" value="true" />
 
-<param name="robot_description"
+<!--Runs Cartographer on bagfile and saves pbsteam of bagfile-->
+<!--args - bag_filenames=bagfile name, imu_noise/lidar_noise=noise std_dev, config = configuration file name-->
+<launch>
+   <param name="/use_sim_time" value="true" />
+
+   <param name="robot_description"
         command="$(find xacro)/xacro.py '$(find kobuki_yd)/urdf/kobuki_yd.urdf.xacro'"/>
 
+   <!--Cartographer node-->
    <node name="cartographer_offline_node" pkg="cartographer_ros"
       type="cartographer_offline_node" args="
           -configuration_directory $(find kobuki_yd)/config_files
 	  -configuration_basenames kobuki_yd_$(arg config).lua
-          -bag_filenames /home/joel/bagfiles/$(arg bag_filenames)/$(arg bag_filenames)_imu-$(arg imu_noise)_lidar-$(arg lidar_noise).bag"
+          -bag_filenames $USERDIR/bagfiles/$(arg bag_filenames)/$(arg bag_filenames)_imu-$(arg imu_noise)_lidar-$(arg lidar_noise).bag"
       output="screen">
     <remap from="echoes" to="horizontal_laser_2d" />
     <remap from="scan" to="/ydlidar/laser/scan" />
@@ -31,11 +35,7 @@
   <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
       type="cartographer_occupancy_grid_node" args="-resolution 0.05" />
 
+  <!--Outputs map and trajectories to rviz-->
   <node name="rviz" pkg="rviz" type="rviz" required="false"
       args="-d $(find kobuki_yd)/config_files/kobuki_yd_rviz.rviz" />
-  <!--<node pkg="rosbag" type="record" name="bag_recorder" args="record -a -duration=10m /chatter -O /home/joel/bagfiles/$(arg bag_filenames)/$(arg bag_filenames)_imu_noise-$(arg imu_noise)_lidar_noise-$(arg lidar_noise)_$(arg config).bag" output="screen"/>-->
-  
-  <!--<node pkg="tf" type="static_transform_publisher" name="map_odom_tf_publisher" args="0 0 0 0 0 0 map odom 10"/>
-  <node pkg="tf" type="static_transform_publisher" name="odom_link_tf_publisher" args="0 0 0 0 0 0 odom base_link 10"/>
-  <node pkg="tf" type="static_transform_publisher" name="world_map_tf_publisher" args="0 0 0 0 0 0 world map 10"/>-->
 </launch>

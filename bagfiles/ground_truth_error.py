@@ -8,14 +8,14 @@ import argparse
 import rosbag
 import pdb
 
-parser = argparse.ArgumentParser(description="Read tf_footprint csv file of a with certain bagfile and config")
+parser = argparse.ArgumentParser(description="Measures error of cartographer trajectory against ground truth (odom topic)")
 parser.add_argument('bagfile', action = "store",
 		    help = "input bag file")
 
 parser.add_argument('imu_noise', action = "store",
-		    help = "input bag file")
+		    help = "imu noise standard deviation")
 parser.add_argument('lidar_noise', action = 'store', 
-		    help = "config file")
+		    help = "lidar noise standard deviation")
 
 parser.add_argument('config', action = 'store', 
 		    help = "config file")
@@ -23,7 +23,6 @@ args = parser.parse_args()
 
 base = args.bagfile + "_imu-" + args.imu_noise + "_lidar-" + args.lidar_noise
 
-bag = rosbag.Bag("/home/joel/bagfiles/" + args.bagfile + "/" + base + ".bag")
 tq = "/home/joel/bagfiles/" + args.bagfile + "/tq_" + base + "_" + args.config + ".csv"
 groundTruth = "/home/joel/bagfiles/" + args.bagfile + "/groundTruth_" + base + ".csv"
 
@@ -67,6 +66,15 @@ errory = errory - np.min(errory)
 errorxy = [list([errorx[i], errory[i]]) for i in range(0, len(errorx)-1)]
 error = [np.linalg.norm(coordinates) for coordinates in errorxy]
 errorxy = np.array(errorxy)
+
+#pdb.set_trace()
+error_csv = "/home/joel/bagfiles/" + args.bagfile + "/" + base + '_' + args.config + '_error.csv'
+print(error_csv)
+with open(error_csv, 'w') as f:
+	writer = csv.writer(f)
+	for entry in error:
+		writer.writerow([entry])
+
 #pdb.set_trace()
 #%%
 #Plot of Cumulative Distribution of Norm Error
@@ -115,4 +123,3 @@ outputcsv = "/home/joel/bagfiles/"+ args.bagfile + "/output.csv"
 print(lines)
 csv_writer = csv.writer(open(outputcsv, 'w+'))
 csv_writer.writerows(lines)
-	

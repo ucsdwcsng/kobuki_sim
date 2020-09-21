@@ -1,16 +1,18 @@
-<!-- Launches Kobuki Gazebo simulation in an empty world -->
+<!-- Launches Kobuki Gazebo simulation in a world w/ manual movement -->
 <launch>
-  <!-- start Gazebo with an empty world -->
+  <!-- start Gazebo with a world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="use_sim_time" value="true"/>
     <arg name="debug" value="false"/>
     <arg name="world_name" value="$(find kobuki_yd)/worlds/Test_world.world"/>
   </include>
   
-  <!-- spawn the robot -->
+  <!-- spawn the robot with these coordinates-->
   <arg name="robot_name" value="mobile_base_with_yd"/>
   <param name="robot_description"
         command="$(find xacro)/xacro.py '$(find kobuki_yd)/urdf/kobuki_yd.urdf.xacro' imuNoise:=$(arg imu_noise) lidarNoise:=$(arg lidar_noise)"/>
+
+  <!--change these args to change starting coordinates-->
   <node pkg="gazebo_ros" type="spawn_model" name="spawn_$(arg robot_name)"
         args="-x 5.0 -y 1 -z 1.5 -unpause -urdf -param robot_description -model $(arg robot_name)" respawn="false">
   </node>
@@ -24,8 +26,9 @@
 
   <node pkg="nodelet" type="nodelet" name="$(arg robot_name)_nodelet_manager" args="manager"/>
 
+  <!--Run cartographer launch file-->
   <include file="$(find kobuki_yd)/launch/kobuki_yd_cartographer.launch"/>
-
+  <!--Run manual movement-->
   <include file="$(find kobuki_keyop)/launch/keyop.launch"/>
 
 </launch>

@@ -15,6 +15,7 @@ from scipy import optimize as opt
 #import quaternion
 import csv
 import argparse
+import pdb
 # %%
 # Extract translation if gmapping
 #file = './data/poses/poses_all_circles.txt'
@@ -52,16 +53,19 @@ import argparse
 #vec = np.quaternion(0, 0, 0, -1)
 #quivers = (rotations*vec*rotations.conjugate())
 #directions = quaternion.as_float_array(quivers)[:, 1:]
-parser = argparse.ArgumentParser(description="Read tf_footprint csv file of a with certain bagfile and config")
+parser = argparse.ArgumentParser(description="Gives error of robot moving in circle (no drift error)")
 parser.add_argument('bagfile', action = "store",
 		    help = "input bag file")
 parser.add_argument('config', action = 'store', 
 		    help = "config file")
+parser.add_argument('imu_noise', action='store', help = "imu noise standard deviation")
+parser.add_argument('lidar_noise', action='store', help = "lidar noise standard deviation")
+
 args = parser.parse_args()
 
 #file = '/home/joel/bagfiles/record_files_' + args.bagfile + '/tf_' + args.bagfile + '_footprint_' + args.config + '.csv'
 
-file = '/home/joel/bagfiles/record_files_' + args.bagfile + '/tq_' + args.bagfile + '_' + args.config + '.csv'
+file = '/home/joel/bagfiles/' + args.bagfile + '/tq_' + args.bagfile + '_' + 'imu-' + args.imu_noise + '_lidar-' + args.lidar_noise + '_' + args.config + '.csv'
 
 trans = []
 times = []
@@ -74,7 +78,7 @@ with open(file) as f:
 		times.append(float(row[1]) + 1e-9*float(row[2])) 	
 #		quat = np.array(list(map(float, row[4:9])))[[0, 1, 2, 3]]
 #		rotations.append(quaternion.from_float_array(quat))
-
+#pdb.set_trace()
 trans = np.array(trans)
 #trans = trans[::-1]
 times = np.array(times)
@@ -89,8 +93,8 @@ times = np.array(times)
 # Select the circles
 # both circs = 80, 25*20, with -1 up top
 plt.figure()
-selection = np.arange(1,950)
-
+selection = np.arange(1,len(times))
+#
 plt.plot(trans[selection,0], trans[selection,1], '-')
 #plt.quiver(trans[selection,0], trans[selection,1], \
 #           directions[selection,0], directions[selection,1])
@@ -122,7 +126,7 @@ center = np.array(center)
 radius = np.array(radius)
 # %%
 # plot circles based on solved values for center and radius
-plt.figure()
+fig = plt.figure()
 circ_plot = []
 for i, c in enumerate(circ):
     plt.plot(trans[c, 0], trans[c, 1])
@@ -132,7 +136,7 @@ for c_plot in circ_plot:
 plt.plot(center[:, 0], center[:, 1], 'x')
 plt.gca().set_aspect('equal')
 plt.title('Radius = %0.3f m'%radius[0])
-
+fig.savefig(args.bagfile + '_' + 'imu-' + args.imu_noise + '_lidar-' + args.lidar_noise + '_' + args.config +  '_trajectory.png')
 # %% Calculate the errors 
 
 diff = []
@@ -145,9 +149,9 @@ for c in circ:
     
 
 #plt.figure()
-diff_normed = []
 error_xy = []
-for d in diff[0]:    
+diff_normed = []
+for d in diff[0]:
     error.append(abs(np.linalg.norm(d) - radius)[0])
     diff_normed.append(d/np.linalg.norm(d)*radius)
 error_xy = (abs(diff[0] - diff_normed))
@@ -157,15 +161,15 @@ error_xy = (abs(diff[0] - diff_normed))
 
 #%%
 #Plot of Cumulative Distribution of Norm Error
-plt.figure()
+fig = plt.figure()
 for i in range(len(circ)):
     plt.subplot(1,len(circ),i+1)
     plt.hist(error, 50, normed = 1, histtype = 'step', cumulative = True)
     plt.title('CDF of errors with median error = %0.6f' %(np.median(error)))
 #%%
-
+fig.savefig(args.bagfile + '_' + args.config +  '_overall_error.png')
 for i in range(len(circ)):
-    plt.figure()
+    fig = plt.figure()
     plt.subplot(121)
     plt.hist(error_xy[:, 0], 50, normed=1, histtype='bar', cumulative=True)
     plt.title('X-axis errors median error = %0.6f' % \
@@ -176,4 +180,25 @@ for i in range(len(circ)):
     plt.title('Y-axis median error = %0.6f' % \
               (np.median(error_xy[:, 1])))
 plt.suptitle('CDF of X & Y Errors')  
-plt.show()
+fig.savefig(args.bagfile + '_' + args.config +  '_xy_error.png')
+inputcsv = "/home/joel/bagfiles/" + args.bagfile + "/output.csv"
+
+csv_reader = csv.reader(open(inputcsv, 'r'))
+lines = list(csv_reader)
+for row in lines:
+	
+	if(args.imu_noise == row[0] and args.lidar_noise == row[1]):
+		if(args.config == "combined"):
+				row[2] = np.median(error)
+				print("Edited combined")
+		elif(args.config == "imu_only"):
+				row[3] = np.median(error)
+				print("Edited imu_only")
+		elif(args.config == "lidar_only"):
+				row[4] = np.median(error)
+				print("Edited lidar_only")
+#pdb.set_trace()
+outputcsv = "/home/joel/bagfiles/"+ args.bagfile + "/output.csv"
+print(lines)
+csv_writer = csv.writer(open(outputcsv, 'w+'))
+csv_writer.writerows(lines)

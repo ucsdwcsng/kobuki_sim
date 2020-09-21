@@ -5,7 +5,7 @@ import os
 import subprocess
 import pdb
 
-parser = argparse.ArgumentParser(description="Read tf_footprint csv file of a with certain bagfile and config")
+parser = argparse.ArgumentParser(description="Run repeated simulations of gazebo simulation with various imu+lidar stddev then output cartographer trajectory errors")
 parser.add_argument('bagfile', action = "store", type = str,
 		    help = "input bag file")
 
@@ -13,7 +13,7 @@ args = parser.parse_args()
 
 base = args.bagfile
 
-inputcsv = "/home/joel/bagfiles/" + base + "/input.csv"
+inputcsv = "/home/joel/bagfiles/" + base + "/output.csv"
 
 csv_reader = csv.reader(open(inputcsv, 'r'))
 #lines = list(csv_reader)
@@ -22,14 +22,12 @@ csv_reader = csv.reader(open(inputcsv, 'r'))
 #csv_writer.writerows(lines)
 
 for row in csv_reader:
-	
-	arg = ['. ~/kobuki_sim/bagfiles/straight_line_record.sh $1 $2 $3', '1' , args.bagfile,row[0],row[1]]
-	#pdb.set_trace()	
-	subprocess.call(['echo $1 $2 $3 $4', '1', args.bagfile, row[0], row[1]], shell = True)	
-	subprocess.call(arg, shell = True)
-	
-	#subprocess.call(["python ~/kobuki_sim/bagfiles/line_trajectory.py $1 $2 $3 $4", '1', args.bagfile, row[0], row[1], 'combined'], shell = True)
-	#subprocess.call(["python ~/kobuki_sim/bagfiles/line_trajectory.py $1 $2 $3 $4", '1', args.bagfile, row[0], row[1], 'imu_only'], shell = True)
-	#subprocess.call(["python ~/kobuki_sim/bagfiles/line_trajectory.py $1 $2 $3 $4", '1', args.bagfile, row[0], row[1], 'lidar_only'], shell = True)
+	if (row[2] == '0' or row[3] == '0' or row[4] == '0'):
+		arg = ['. ~/kobuki_sim/bagfiles/new_record.sh $1 $2 $3', '1' , args.bagfile,row[0],row[1]]
+		#pdb.set_trace()	
+		subprocess.call(['echo $1 $2 $3 $4', '1', args.bagfile, row[0], row[1]], shell = True)	
+		subprocess.call(arg, shell = True)
+	else:
+		print("Skipped" + args.bagfile + " " + row[0] + " " + row[1])	
 
-subprocess.call(["python ~/kobuki_sim/bagfiles/plot_error.py $1", '1', "output.csv"], shell = True)
+

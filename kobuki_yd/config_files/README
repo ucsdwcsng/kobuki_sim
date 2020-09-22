@@ -1,0 +1,7 @@
+These are the config files used in Cartographer, to understand all parameters, look at this link: https://google-cartographer-ros.readthedocs.io/en/latest/configuration.html
+
+1. kobuki_yd_combined.lua - uses imu data and lidar scan matching
+2. kobuki_yd_imu_only.lua - uses imu data only and no lidar scan matching
+3. kobuki_yd_lidar_only.lua - uses lidar scan matching only and no imu data
+4. kobuki_yd_rviz.rviz - RVIZ visualization configuration
+5. kobuki_yd.lua - default Cartographer configuration

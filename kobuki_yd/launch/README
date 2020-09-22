@@ -1,0 +1,20 @@
+These are the launch files that are mainly used with the kobuki robot and Cartographer:
+
+1. bagfile_cartographer.launch - used to run Cartographer on standalone bagfiles (not for repeated simulation runs)
+  - note that this uses cartographer_flat_world_imu_node which zeroes the x and y imu values, similar to the readings on the physical kobuki
+  - needs bagfile and configs as arguments
+2. cartographer_bag_record.launch - runs Cartographer on bagfiles (w/varied imu and lidar noise stddevs) and saves pbstream of trajectories
+  - needs bagfile, config, imu_noise, and lidar_noise as arguments
+3. imu_collection.launch - runs gazebo simulation, with robot pose ekf node that combines imu and odom values to form improved poses, and saves bagfile
+  - needs manual input for movement
+  - needs output bagfile_name as argument
+4. kobuki_yd_cartographer.launch - runs cartographer on online mode, needs gazebo running at the same time to form map
+5. mapping.launch - runs gazebo and cartographer at the same time to map area, (runs kobuki_yd_cartographer.launch) 
+  - needs manual input for movement
+  - uses default Cartographer configuration
+  - needs imu_noise, and lidar_noise as arguments
+6. minimal.launch - runs gazebo with no cartographer
+7. record_bag_files.launch - runs gazebo and set robot to have a constant velocity
+  - needs imu_noise and lidar_noise as arguments
+8. record_straight_line.launch - runs gazebo and sets robot trajectory according to a rosnode file (need to create a rospackage that defines the movement of robot
+  - needs bagfile_name, imu_noise, and lidar_noise as arguments

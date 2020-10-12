@@ -1,15 +1,10 @@
 # kobuki_sim
 
-#1. Place kobuki_description, kobuki_gazebo, kobuki_keyop, and kobuki_yd in /opt/kinetic/share
+This repository is for running cartographer mapping simulations of the kobuki robot. You will be able to run a simulation of a robot moving across an enviornment, then map the enviornment using the IMU and Lidar data, then test the accuracy of the map by comparing the localized trajectory of the robot with the actual trajectory.
 
-#2. Run the following command to launch the kobuki simulation: roslaunch kobuki_yd mapping.launch
 
-#3. Run cartographer_record script
+Instalation Instructions:
 
-#4. Move the kobuki around in the simulation
-
-#5. stop recording and stop running the simulation
-
-#6. run cartographer_parse script
-
-#7. run recordGraph.py script
+1. Install ros-kinetic: instructions here -> http://wiki.ros.org/kinetic/Installation/Ubuntu
+2. Install cartographer-turtlebot: instructions here -> https://google-cartographer-ros-for-turtlebots.readthedocs.io/en/latest/
+3. 
